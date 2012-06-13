@@ -20,3 +20,6 @@ rm $SRC/yii-*.tar.gz
 
 ln -s $DST/framework/yiic /usr/local/bin/yiic
 
+# create app
+echo -e "yes\\n" | yiic webapp $WEBROOT
+
