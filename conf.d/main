@@ -1,0 +1,15 @@
+#!/bin/bash -ex
+
+DB_NAME=yiiframework
+DB_USER=yiiframework
+DB_PASS=$(mcookie)
+
+ADMIN_NAME=admin
+ADMIN_PASS=turnkey
+ADMIN_MAIL=admin@example.com
+GII_PASS=turnkey
+
+SRC=/usr/local/src
+DST=/usr/local/share/yiiframework
+WEBROOT=/var/www/yiiframework
+
