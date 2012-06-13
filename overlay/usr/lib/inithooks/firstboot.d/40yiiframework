@@ -1,0 +1,8 @@
+#!/bin/bash -e
+# set yiiframework gii password and admin email
+
+. /etc/default/inithooks
+
+[ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
+$INITHOOKS_PATH/bin/yiiframework.py --pass="$APP_PASS" --email="$APP_EMAIL"
+
