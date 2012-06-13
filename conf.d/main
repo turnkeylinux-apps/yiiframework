@@ -20,6 +20,15 @@ rm $SRC/yii-*.tar.gz
 
 ln -s $DST/framework/yiic /usr/local/bin/yiic
 
-# create app
+# create app, apply custom overlay and tweak
 echo -e "yes\\n" | yiic webapp $WEBROOT
+
+cp -TdR $SRC/yiiframework.overlay $WEBROOT
+rm -rf $SRC/yiiframework.overlay
+
+CONFIG=$WEBROOT/protected/config
+sed -i "s|'password' =>.*|'password' => '$DB_PASS',|" $CONFIG/main.php
+sed -i "s|'password' =>.*|'password' => '$DB_PASS',|" $CONFIG/console.php
+sed -i "s|'password'=>.*|'password'=>'$GII_PASS',|" $CONFIG/main.php
+sed -i "s|'adminEmail'=>.*|'adminEmail'=>'$ADMIN_MAIL',|" $CONFIG/main.php
 
