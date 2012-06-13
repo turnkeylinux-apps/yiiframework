@@ -38,3 +38,8 @@ sed -i "s|'admin'=>'admin'|'admin'=>'$ADMIN_PASS'|" $CONF
 CONF=$WEBROOT/protected/views/site/login.php
 sed -i "s|admin/admin|admin/$ADMIN_PASS|" $CONF
 
+# tweak permissions
+chown -R www-data:www-data $WEBROOT
+chmod 640 $CONFIG/main.php
+chmod 640 $CONFIG/console.php
+
