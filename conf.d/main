@@ -32,3 +32,9 @@ sed -i "s|'password' =>.*|'password' => '$DB_PASS',|" $CONFIG/console.php
 sed -i "s|'password'=>.*|'password'=>'$GII_PASS',|" $CONFIG/main.php
 sed -i "s|'adminEmail'=>.*|'adminEmail'=>'$ADMIN_MAIL',|" $CONFIG/main.php
 
+CONF=$WEBROOT/protected/components/UserIdentity.php
+sed -i "s|'admin'=>'admin'|'admin'=>'$ADMIN_PASS'|" $CONF
+
+CONF=$WEBROOT/protected/views/site/login.php
+sed -i "s|admin/admin|admin/$ADMIN_PASS|" $CONF
+
