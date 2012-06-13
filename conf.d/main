@@ -13,3 +13,10 @@ SRC=/usr/local/src
 DST=/usr/local/share/yiiframework
 WEBROOT=/var/www/yiiframework
 
+# unpack and create symlink to yii cli
+tar -zxf $SRC/yii-*.tar.gz -C $(dirname $DST)
+mv $(dirname $DST)/yii-* $DST
+rm $SRC/yii-*.tar.gz
+
+ln -s $DST/framework/yiic /usr/local/bin/yiic
+
