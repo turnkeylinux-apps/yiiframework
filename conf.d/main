@@ -54,3 +54,8 @@ $MYSQL_BATCH --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost
 
 /etc/init.d/mysql stop
 
+# configure apache
+a2dissite default
+a2ensite yiiframework
+a2enmod rewrite
+
