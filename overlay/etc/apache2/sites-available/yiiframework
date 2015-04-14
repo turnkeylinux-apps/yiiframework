@@ -1,7 +1,7 @@
 NameVirtualHost *:80
 NameVirtualHost *:443
 
-Alias /admin /var/www/yii2/backend/web
+Alias /admin /var/www/yiiframework/backend/web
 
 <VirtualHost *:80>
     UseCanonicalName Off
