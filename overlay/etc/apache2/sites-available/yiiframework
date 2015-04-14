@@ -16,7 +16,14 @@ Alias /admin /var/www/yiiframework/backend/web
     DocumentRoot /var/www/yiiframework/frontend/web
 </VirtualHost>
 
-<Directory /var/www/yiiframework/>
+<Directory /var/www/yiiframework/frontend/web/>
+    Options +FollowSymLinks
+    AllowOverride All
+    order allow,deny
+    allow from all
+</Directory>
+
+<Directory /var/www/yiiframework/backend/web/>
     Options +FollowSymLinks
     AllowOverride All
     order allow,deny
