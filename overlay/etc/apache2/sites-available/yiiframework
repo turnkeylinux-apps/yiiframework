@@ -1,17 +1,19 @@
 NameVirtualHost *:80
 NameVirtualHost *:443
 
+Alias /admin /var/www/yii2/backend/web
+
 <VirtualHost *:80>
     UseCanonicalName Off
     ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/yiiframework/
+    DocumentRoot /var/www/yiiframework/frontend/web
 </VirtualHost>
 
 <VirtualHost *:443>
     SSLEngine on
     SSLCertificateFile /etc/ssl/certs/cert.pem
     ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/yiiframework/
+    DocumentRoot /var/www/yiiframework/frontend/web
 </VirtualHost>
 
 <Directory /var/www/yiiframework/>
