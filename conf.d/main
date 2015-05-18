@@ -1,47 +1,45 @@
 #!/bin/bash -ex
 
-DB_NAME=yiiframework
-DB_USER=yiiframework
+#switched to yii2 db naming conventions
+DB_NAME=yii2
+DB_USER=yii2
 DB_PASS=$(mcookie)
 
-ADMIN_NAME=admin
-ADMIN_PASS=turnkey
-ADMIN_MAIL=admin@example.com
-GII_PASS=turnkey
-
 SRC=/usr/local/src
-DST=/usr/local/share/yiiframework
 WEBROOT=/var/www/yiiframework
 
-# unpack and create symlink to yii cli
-tar -zxf $SRC/yii-*.tar.gz -C $(dirname $DST)
-mv $(dirname $DST)/yii-* $DST
-rm $SRC/yii-*.tar.gz
+# unpack
+tar -zxf $SRC/yii-*.tgz -C $WEBROOT
+rm $SRC/yii-*.tgz
 
-ln -s $DST/framework/yiic /usr/local/bin/yiic
+cd $WEBROOT
 
-# create app, apply custom overlay and tweak
-echo -e "yes\\n" | yiic webapp $WEBROOT
+#install Composer globally
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
 
+#Initialise Yii as production ready
+php init --env=Production --overwrite=All
+ln -s /var/www/yiiframework/yii /usr/local/bin/yii
+
+#config db connection
+CONFIG=$WEBROOT/common/config/main-local.php
+sed -i "s|'dsn' =>.*|'dsn' => 'mysql:host=localhost;dbname=$DB_NAME',|" $CONFIG
+sed -i "s|'username' =>.*|'username' => '$DB_USER',|" $CONFIG
+sed -i "s|'password' =>.*|'password' => '$DB_PASS',|" $CONFIG
+
+#overwrite and tweak example app a little
 cp -TdR $SRC/yiiframework.overlay $WEBROOT
 rm -rf $SRC/yiiframework.overlay
 
-CONFIG=$WEBROOT/protected/config
-sed -i "s|'password' =>.*|'password' => '$DB_PASS',|" $CONFIG/main.php
-sed -i "s|'password' =>.*|'password' => '$DB_PASS',|" $CONFIG/console.php
-sed -i "s|'password'=>.*|'password'=>'$GII_PASS',|" $CONFIG/main.php
-sed -i "s|'adminEmail'=>.*|'adminEmail'=>'$ADMIN_MAIL',|" $CONFIG/main.php
-
-CONF=$WEBROOT/protected/components/UserIdentity.php
-sed -i "s|'admin'=>'admin'|'admin'=>'$ADMIN_PASS'|" $CONF
-
-CONF=$WEBROOT/protected/views/site/login.php
-sed -i "s|admin/admin|admin/$ADMIN_PASS|" $CONF
+F_LAYOUT=$WEBROOT/frontend/views/layouts/main.php
+sed -i "s|'brandLabel' => '.*|'brandLabel' => 'TurnKey Linux',|' $F_LAYOUT
+R_LAYOUT=$WEBROOT/backend/views/layouts/main.php
+sed -i "s|'brandLabel' => '.*|'brandLabel' => 'TurnKey Linux',|' $R_LAYOUT
 
 # tweak permissions
 chown -R www-data:www-data $WEBROOT
-chmod 640 $CONFIG/main.php
-chmod 640 $CONFIG/console.php
+chmod 640 $CONFIG
 
 # setup the database
 /etc/init.d/mysql start
@@ -52,6 +50,10 @@ MYSQL_ADMIN="mysqladmin --user=root --password=$MYSQL_PASS"
 $MYSQL_ADMIN create $DB_NAME
 $MYSQL_BATCH --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
 
+#run yii to connect app to db
+echo 'yes' | yii migrate/up
+
+#finish up
 /etc/init.d/mysql stop
 
 # configure apache
