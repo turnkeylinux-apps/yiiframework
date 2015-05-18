@@ -57,7 +57,7 @@ echo 'yes' | yii migrate/up
 /etc/init.d/mysql stop
 
 # configure apache
-a2dissite default
+a2dissite 000-default
 a2ensite yiiframework
 a2enmod rewrite
 
