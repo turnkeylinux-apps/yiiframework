@@ -1,3 +1,12 @@
+turnkey-yiiframework-14.0 (1) turnkey; urgency=low
+
+  * Upgraded to latest upstream version of Yii framework (2.0.3).
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Fri, 19 Jun 2015 14:30:17 +1000
+
 turnkey-yiiframework-13.0 (1) turnkey; urgency=low
 
   * PHPMyAdmin:
