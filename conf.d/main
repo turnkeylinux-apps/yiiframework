@@ -13,7 +13,7 @@ cd $SRC
 tar -zxf yii-*.tgz -C .
 mkdir -p $WEBROOT
 mv $SRC/advanced/* $WEBROOT
-#rm $SRC/yii-*.tgz
+rm $SRC/yii-*.tgz
 
 cd $WEBROOT
 
