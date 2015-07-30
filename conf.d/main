@@ -9,8 +9,11 @@ SRC=/usr/local/src
 WEBROOT=/var/www/yiiframework
 
 # unpack
-tar -zxf $SRC/yii-*.tgz -C $WEBROOT
-rm $SRC/yii-*.tgz
+cd $SRC
+tar -zxf yii-*.tgz -C .
+mkdir -p $WEBROOT
+mv $SRC/advanced/* $WEBROOT
+#rm $SRC/yii-*.tgz
 
 cd $WEBROOT
 
@@ -33,9 +36,9 @@ cp -TdR $SRC/yiiframework.overlay $WEBROOT
 rm -rf $SRC/yiiframework.overlay
 
 F_LAYOUT=$WEBROOT/frontend/views/layouts/main.php
-sed -i "s|'brandLabel' => '.*|'brandLabel' => 'TurnKey Linux',|' $F_LAYOUT
+sed -i "s|'brandLabel' => '.*|'brandLabel' => 'TurnKey Linux',|" $F_LAYOUT
 R_LAYOUT=$WEBROOT/backend/views/layouts/main.php
-sed -i "s|'brandLabel' => '.*|'brandLabel' => 'TurnKey Linux',|' $R_LAYOUT
+sed -i "s|'brandLabel' => '.*|'brandLabel' => 'TurnKey Linux',|" $R_LAYOUT
 
 # tweak permissions
 chown -R www-data:www-data $WEBROOT
