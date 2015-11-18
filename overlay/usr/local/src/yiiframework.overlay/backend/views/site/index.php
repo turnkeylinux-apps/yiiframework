@@ -21,7 +21,7 @@ $this->title = 'My TurnKey Linux Yii Application';
                 <p>For docs relating to TurnKey and it's custom
                 components, please see the TurnKey Linux documentation</p>
                 
-                <p><a class="btn btn-default" href="http://www.turnkeylinux.org/docs/">
+                <p><a class="btn btn-default" href="https://www.turnkeylinux.org/docs/">
                 TurnKey Docs &raquo;</a></p>
             </div>
             <div class="col-lg-4">
@@ -31,7 +31,7 @@ $this->title = 'My TurnKey Linux Yii Application';
                 components, please try posting on the TurnKey Linux
                 forums</p>
                 
-                <p><a class="btn btn-default" href="http://www.turnkeylinux.org/forum/support/">
+                <p><a class="btn btn-default" href="https://www.turnkeylinux.org/forum/support/">
                 TurnKey Forums &raquo;</a></p>
 
             </div>
