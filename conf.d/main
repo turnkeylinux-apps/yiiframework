@@ -17,10 +17,6 @@ rm $SRC/yii-*.tgz
 
 cd $WEBROOT
 
-#install Composer globally
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
-
 #Initialise Yii as production ready
 php init --env=Production --overwrite=All
 ln -s /var/www/yiiframework/yii /usr/local/bin/yii
