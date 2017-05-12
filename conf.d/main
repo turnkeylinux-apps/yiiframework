@@ -13,10 +13,7 @@ mkdir -p $WEBROOT
 cd $WEBROOT
 
 composer global require "fxp/composer-asset-plugin:^1.2.0"
-composer create-project yiisoft/yii2-app-advanced advanced 2.0.11
-
-mv advanced/* .
-rm -rf advanced
+composer create-project yiisoft/yii2-app-advanced . 2.0.11
 
 #Initialise Yii as production ready
 php init --env=Production --overwrite=All
