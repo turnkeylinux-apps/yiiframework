@@ -5,15 +5,17 @@ DB_NAME=yii2
 DB_USER=yii2
 DB_PASS=$(mcookie)
 
+SRC=/usr/local/src
 WEBROOT=/var/www/yiiframework
 
 # unpack
+cd $SRC
+tar -zxf yii-*.tgz -C .
 mkdir -p $WEBROOT
+mv $SRC/advanced/* $WEBROOT
+rm $SRC/yii-*.tgz
 
 cd $WEBROOT
-
-composer global require "fxp/composer-asset-plugin:^1.2.0"
-composer create-project yiisoft/yii2-app-advanced . 2.0.11
 
 #Initialise Yii as production ready
 php init --env=Production --overwrite=All
