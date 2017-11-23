@@ -1,5 +1,7 @@
 turnkey-yiiframework-15.0 (1) turnkey; urgency=low
 
+  * Updated yiiframework to 2.0.13
+
   * Install Adminer directly from stretch/main repo
 
   * Replace MySQL with MariaDB

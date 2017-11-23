@@ -41,7 +41,7 @@ chown -R www-data:www-data $WEBROOT
 chmod 640 $CONFIG
 
 # setup the database
-/etc/init.d/mysql start
+service mysql start
 
 MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
 MYSQL_ADMIN="mysqladmin --user=root --password=$MYSQL_PASS"
@@ -53,7 +53,7 @@ $MYSQL_BATCH --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost
 echo 'yes' | yii migrate/up
 
 #finish up
-/etc/init.d/mysql stop
+service mysql stop
 
 # configure apache
 a2dissite 000-default
