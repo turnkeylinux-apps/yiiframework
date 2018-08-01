@@ -15,6 +15,10 @@ and on top of that:
    - Installed from upstream source code to /var/www/yiiframework
    - Symlink to yiic CLI command in path (convenience).
 
+   **Security note**: Updates to Yii may require supervision so
+   they **ARE NOT** configured to install automatically. See `Yii
+   documentation`_ for upgrading.
+
 - SSL support out of the box.
 - `Adminer`_ administration frontend for MySQL (listening on port
   12322 - uses SSL).
@@ -29,6 +33,7 @@ Credentials *(passwords set at first boot)*
 -  Adminer: username **adminer**
 
 
-.. _Yii: http://www.yiiframework.com
+.. _Yii: https://www.yiiframework.com
 .. _TurnKey Core: https://www.turnkeylinux.org/core
-.. _Adminer: http://www.adminer.org/
+.. _Adminer: https://www.adminer.org/
+.. _Yii documentation: https://github.com/yiisoft/yii2/blob/master/framework/UPGRADE.md
