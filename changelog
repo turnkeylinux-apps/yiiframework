@@ -1,3 +1,13 @@
+turnkey-yiiframework-17.1 (1) turnkey; urgency=low
+
+  * Updated all Debian packages to latest.
+    [ autopatched by buildtasks ]
+
+  * Patched bugfix release. Closes #1734.
+    [ autopatched by buildtasks ]
+
+ -- Jeremy Davis <jeremy@turnkeylinux.org>  Tue, 20 Sep 2022 20:16:53 +0000
+
 turnkey-yiiframework-17.0 (1) turnkey; urgency=low
 
   * Updated yiiframework to 2.0.45.
