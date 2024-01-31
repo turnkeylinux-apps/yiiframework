@@ -1,3 +1,15 @@
+turnkey-yiiframework-18.0 (1) turnkey; urgency=low
+
+  * Updated yiiframework v2 to latest upstream version (currently 2.0.49).
+
+  * Updated all relevant Debian packages to Bookworm/12 versions; including
+    PHP 8.2.
+
+  * Note: Please refer to turnkey-core's 18.0 changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Anton Pyrogovskyi <anton@turnkeylinux.org>  Wed, 31 Jan 2024 14:52:34 +0100
+
 turnkey-yiiframework-17.1 (1) turnkey; urgency=low
 
   * Updated all Debian packages to latest.
