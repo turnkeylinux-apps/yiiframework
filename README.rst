@@ -12,12 +12,15 @@ and on top of that:
 
 - Yii Framework configurations:
    
-   - Installed from upstream source code to /var/www/yiiframework
-   - Symlink to yiic CLI command in path (convenience).
+   - Yii 2 is installed from a pinned official advanced-application release
+     in ``/var/www/yiiframework``.
+   - The ``yii`` console command is available in the system path.
+   - The example application is configured for MariaDB.
 
    **Security note**: Updates to Yii may require supervision so
-   they **ARE NOT** configured to install automatically. See `Yii
-   documentation`_ for upgrading.
+   they **ARE NOT** configured to install automatically. Run
+   ``yii-update --check`` to inspect the official Yii 2 release channel,
+   then follow the `Yii documentation`_ for a supervised upgrade.
 
 - SSL support out of the box.
 - `Adminer`_ administration frontend for MySQL (listening on port

@@ -1,21 +1,29 @@
-#!/bin/bash -ex
+#!/bin/bash -e
+
+set -x
 
 #switched to yii2 db naming conventions
 DB_NAME=yii2
 DB_USER=yii2
-DB_PASS=$(mcookie)
+VERSION=2.0.55
+TAG=2.0.55
+COMMIT=babee66def599432735a1ed39c9cf0bc5163a775
+ARCHIVE_SHA256=e4e74986791b14deb0175685e9c45ebf0809984ae9dd19d284142fb06cbb348a
+FILENAME="yii-advanced-app-$VERSION.tgz"
 
 SRC=/usr/local/src
 WEBROOT=/var/www/yiiframework
 
 # unpack
-cd $SRC
-tar -zxf yii-*.tgz -C .
-mkdir -p $WEBROOT
-mv $SRC/advanced/* $WEBROOT
-rm $SRC/yii-*.tgz
+cd "$SRC"
+printf '%s  %s\n' "$ARCHIVE_SHA256" "$FILENAME" | sha256sum -c -
+tar -zxf "$FILENAME" -C .
+mkdir -p "$WEBROOT"
+cp -a "$SRC/advanced/." "$WEBROOT/"
+rm "$SRC/$FILENAME"
+find "$SRC/advanced" -depth -delete
 
-cd $WEBROOT
+cd "$WEBROOT"
 
 #Initialise Yii as production ready
 php init --env=Production --overwrite=All
@@ -23,34 +31,53 @@ ln -s /var/www/yiiframework/yii /usr/local/bin/yii
 
 #config db connection
 CONFIG=$WEBROOT/common/config/main-local.php
-sed -i "s|'dsn' =>.*|'dsn' => 'mysql:host=localhost;dbname=$DB_NAME',|" $CONFIG
-sed -i "s|'username' =>.*|'username' => '$DB_USER',|" $CONFIG
-sed -i "s|'password' =>.*|'password' => '$DB_PASS',|" $CONFIG
+set +x
+DB_PASS=$(mcookie)
+sed -i "s|'dsn' =>.*|'dsn' => 'mysql:host=localhost;dbname=$DB_NAME',|" "$CONFIG"
+sed -i "s|'username' =>.*|'username' => '$DB_USER',|" "$CONFIG"
+sed -i "s|'password' =>.*|'password' => '$DB_PASS',|" "$CONFIG"
+set -x
 
 #overwrite and tweak example app a little
-cp -TdR $SRC/yiiframework.overlay $WEBROOT
-rm -rf $SRC/yiiframework.overlay
+cp -TdR "$SRC/yiiframework.overlay" "$WEBROOT"
+find "$SRC/yiiframework.overlay" -depth -delete
 
 F_LAYOUT=$WEBROOT/frontend/views/layouts/main.php
-sed -i "s|'brandLabel' => '.*|'brandLabel' => 'TurnKey Linux',|" $F_LAYOUT
+sed -i "s|'brandLabel' => '.*|'brandLabel' => 'TurnKey Linux',|" "$F_LAYOUT"
 R_LAYOUT=$WEBROOT/backend/views/layouts/main.php
-sed -i "s|'brandLabel' => '.*|'brandLabel' => 'TurnKey Linux',|" $R_LAYOUT
+sed -i "s|'brandLabel' => '.*|'brandLabel' => 'TurnKey Linux',|" "$R_LAYOUT"
+
+install -d -m 0755 /usr/local/share/turnkey-yiiframework
+cat >/usr/local/share/turnkey-yiiframework/source <<EOF
+version=$VERSION
+tag=$TAG
+commit=$COMMIT
+archive_sha256=$ARCHIVE_SHA256
+archive_url=https://github.com/yiisoft/yii2/releases/download/$VERSION/$FILENAME
+EOF
 
 # tweak permissions
-chown -R www-data:www-data $WEBROOT
-chmod 640 $CONFIG
+chown -R www-data:www-data "$WEBROOT"
+chown root:www-data "$CONFIG"
+chmod 0640 "$CONFIG"
 
 # setup the database
 service mysql start
 
-MYSQL_BATCH="mysql --user=root --password=$MYSQL_PASS --batch"
-MYSQL_ADMIN="mysqladmin --user=root --password=$MYSQL_PASS"
-
-$MYSQL_ADMIN create $DB_NAME
-$MYSQL_BATCH --execute "grant all privileges on $DB_NAME.* to $DB_USER@localhost identified by '$DB_PASS'; flush privileges;"
+mysqladmin create "$DB_NAME"
+set +x
+mysql --batch <<EOF
+CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
+GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';
+FLUSH PRIVILEGES;
+EOF
+unset DB_PASS
+set -x
 
 #run yii to connect app to db
-echo 'yes' | yii migrate/up
+runuser -u www-data -- yii migrate/up --interactive=0
+runuser -u www-data -- yii migrate/history 1
+php requirements.php
 
 #finish up
 service mysql stop
@@ -59,4 +86,3 @@ service mysql stop
 a2dissite 000-default
 a2ensite yiiframework
 a2enmod rewrite
-
