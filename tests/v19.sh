@@ -1,6 +1,7 @@
 #!/bin/bash
 set -Eeuo pipefail
 umask 077
+trap 'printf "yiiframework-v19-test: line %s failed\n" "$LINENO" >&2' ERR
 
 result=${TKL_TEST_RESULT:?TKL_TEST_RESULT is required}
 db_password=${TKL_TEST_DB_PASS:?TKL_TEST_DB_PASS is required}
