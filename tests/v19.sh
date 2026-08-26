@@ -39,7 +39,8 @@ curl --fail --silent --show-error http://127.0.0.1/ >"$page"
 grep -Fq 'successfully launched your TurnKey Linux Yii-powered server' "$page"
 curl --insecure --fail --silent --show-error https://127.0.0.1/ >"$page"
 grep -Fq 'successfully launched your TurnKey Linux Yii-powered server' "$page"
-curl --insecure --fail --silent --show-error https://127.0.0.1/admin/ >"$page"
+curl --location --insecure --fail --silent --show-error \
+    https://127.0.0.1/admin/ >"$page"
 grep -Fq 'id="login-form"' "$page"
 grep -Fq 'name="_csrf-backend"' "$page"
 
