@@ -40,7 +40,8 @@ grep -Fq 'successfully launched your TurnKey Linux Yii-powered server' "$page"
 curl --insecure --fail --silent --show-error https://127.0.0.1/ >"$page"
 grep -Fq 'successfully launched your TurnKey Linux Yii-powered server' "$page"
 curl --insecure --fail --silent --show-error https://127.0.0.1/admin/ >"$page"
-grep -Fq 'Yii2 advanced demo application' "$page"
+grep -Fq 'id="login-form"' "$page"
+grep -Fq 'name="_csrf-backend"' "$page"
 
 yii help >/dev/null
 yii migrate/history 1 |
