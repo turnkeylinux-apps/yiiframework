@@ -1,3 +1,16 @@
+turnkey-yiiframework-19.0 (1) turnkey; urgency=low
+
+  * Install Yii 2.0.55 from its pinned official advanced-application release.
+
+  * Preserve the frontend and backend samples, Yii console, Apache HTTPS, and
+    MariaDB application boundaries on Debian 13 Trixie.
+
+  * Add a supervised check for updates on the official Yii 2 release channel.
+
+  * See turnkey-core's 19.0 changelog for common platform changes.
+
+ -- TurnKey Linux maintainers <release@turnkeylinux.org>  Tue, 25 Aug 2026 00:00:00 +0000
+
 turnkey-yiiframework-18.0 (1) turnkey; urgency=low
 
   * Updated yiiframework v2 to latest upstream version (currently 2.0.49).
@@ -280,4 +293,3 @@ turnkey-yiiframework-12.0 (1) turnkey; urgency=low
     appliances. Here we only describe changes specific to this appliance.
 
  -- Alon Swartz <alon@turnkeylinux.org>  Wed, 01 Aug 2012 08:00:00 +0200
-

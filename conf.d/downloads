@@ -1,13 +1,15 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
-dl() {
-    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
-    cd $2; curl -L -f -O $PROXY $1; cd -
-}
+set -x
 
-VERSION="$(NO_TAGS=1 gh_releases yiisoft/yii2 | tail -1)"
+VERSION=2.0.55
 FILENAME="yii-advanced-app-$VERSION.tgz"
 URL="https://github.com/yiisoft/yii2/releases/download/$VERSION/$FILENAME"
+SHA256=e4e74986791b14deb0175685e9c45ebf0809984ae9dd19d284142fb06cbb348a
+curl_args=(--fail --location --show-error)
+if [[ -n ${FAB_HTTP_PROXY:-} ]]; then
+    curl_args+=(--proxy "$FAB_HTTP_PROXY")
+fi
 
-dl $URL /usr/local/src
-
+curl "${curl_args[@]}" --output "/usr/local/src/$FILENAME" "$URL"
+printf '%s  %s\n' "$SHA256" "/usr/local/src/$FILENAME" | sha256sum -c -

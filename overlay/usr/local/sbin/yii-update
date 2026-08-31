@@ -1,0 +1,46 @@
+#!/bin/bash
+set -Eeuo pipefail
+
+SOURCE=/usr/local/share/turnkey-yiiframework/source
+REMOTE=https://github.com/yiisoft/yii2.git
+
+if [[ $# -ne 1 || $1 != --check ]]; then
+    echo "Usage: $(basename "$0") --check" >&2
+    exit 2
+fi
+[[ -r $SOURCE ]] || {
+    echo "Yii source provenance is unavailable" >&2
+    exit 1
+}
+# shellcheck disable=SC1090
+. "$SOURCE"
+
+runtime_version=$(php -r \
+    'require "/var/www/yiiframework/vendor/yiisoft/yii2/Yii.php"; echo Yii::getVersion();')
+test "$runtime_version" = "$version"
+
+tag_refs=$(git ls-remote --refs "$REMOTE" 'refs/tags/2.0.*')
+latest_tag=$(awk '$2 ~ /^refs\/tags\/2\.0\.[0-9]+$/ {
+        sub("refs/tags/", "", $2); print $2
+    }' <<<"$tag_refs" | sort -V | tail -n 1)
+[[ $latest_tag =~ ^2\.0\.[0-9]+$ ]]
+tag_object=$(awk -v ref="refs/tags/$latest_tag" '$2 == ref {print $1}' \
+    <<<"$tag_refs")
+peeled=$(git ls-remote "$REMOTE" "refs/tags/$latest_tag^{}" |
+    awk 'NR == 1 {print $1}')
+candidate=${peeled:-$tag_object}
+[[ $candidate =~ ^[0-9a-f]{40}$ ]]
+asset="https://github.com/yiisoft/yii2/releases/download/$latest_tag/yii-advanced-app-$latest_tag.tgz"
+curl --fail --location --silent --show-error --head "$asset" >/dev/null
+
+status=update-available
+if [[ $runtime_version == "$latest_tag" && $commit == "$candidate" ]]; then
+    status=up-to-date
+elif dpkg --compare-versions "$runtime_version" gt "$latest_tag"; then
+    status=newer-than-channel
+fi
+
+printf 'installed=%s\ninstalled_commit=%s\nlatest=%s\n' \
+    "$runtime_version" "$commit" "$latest_tag"
+printf 'candidate=%s\nasset=%s\nchannel=official-yii-2.x\nstatus=%s\n' \
+    "$candidate" "$asset" "$status"
